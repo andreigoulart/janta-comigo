@@ -10,9 +10,9 @@
   h1 { margin:0 0 10px; }
   .dish { margin:10px 0; font-size:18px; }
   .buttons { display:flex; justify-content:center; gap:20px; margin-top:20px; position:relative; }
-  button { padding:12px 20px; font-size:16px; font-weight:bold; border:none; border-radius:12px; cursor:pointer; color:white; }
-  .btn-yes { background:#10b981; z-index:2; position:relative; }
-  .btn-no { background:#ef4444; position:absolute; z-index:3; }
+  button { padding:12px 20px; font-size:16px; font-weight:bold; border:none; border-radius:12px; cursor:pointer; color:white; position:relative; }
+  .btn-yes { background:#10b981; z-index:2; }
+  .btn-no { background:#ef4444; z-index:3; }
   dialog { border:none; border-radius:16px; padding:20px; background:#0b1025; color:#e5e7eb; }
 </style>
 </head>
@@ -30,7 +30,7 @@
 
 <dialog id="dialog">
   <h2>UHUUULLLL🕯️🍷💞</h2>
-  <p>Eu te amo Bina 💞</p>
+  <p>Eu te Amo 💞</p>
   <button id="close">Ok</button>
 </dialog>
 
@@ -39,6 +39,7 @@
   const noBtn = document.getElementById('no');
   const dlg = document.getElementById('dialog');
   const closeBtn = document.getElementById('close');
+  const container = document.getElementById('btn-container');
   let clickedYes = false;
 
   yesBtn.addEventListener('click', () => {
@@ -48,18 +49,11 @@
 
   closeBtn.addEventListener('click', () => dlg.close());
 
-  // Faz o botão "Não" fugir à frente do "Sim"
   noBtn.addEventListener('mouseenter', () => {
     if (clickedYes) return;
-    const yesRect = yesBtn.getBoundingClientRect();
-    const containerRect = document.getElementById('btn-container').getBoundingClientRect();
-    let x = Math.random() * (containerRect.width - noBtn.offsetWidth);
-    let y = Math.random() * (containerRect.height - noBtn.offsetHeight);
-
-    // Garantir que o Não apareça próximo ou sobre o Sim, mas nunca clicável
-    x = yesRect.left - containerRect.left + Math.random() * (yesRect.width - noBtn.offsetWidth);
-    y = yesRect.top - containerRect.top + Math.random() * (yesRect.height - noBtn.offsetHeight);
-
+    const containerRect = container.getBoundingClientRect();
+    const x = Math.random() * (containerRect.width - noBtn.offsetWidth);
+    const y = Math.random() * (containerRect.height - noBtn.offsetHeight);
     noBtn.style.transform = `translate(${x}px, ${y}px)`;
   });
 </script>
