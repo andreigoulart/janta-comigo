@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Janta comigo? 🐟❤️</title>
+  <meta name="description" content="Convite romântico: Salmão ao molho mostarda com laranja. Clique em Sim ou Não." />
+  <style>
+    :root{
+      --bg: #0f172a;
+      --card: #111827cc;
+      --text: #e5e7eb;
+      --accent: #f472b6;
+      --accent2: #22d3ee;
+      --yes: #10b981;
+      --no: #ef4444;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100svh; display:grid; place-items:center;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text); background: radial-gradient(1200px 600px at 20% 10%, #1e293b 0%, var(--bg) 55%);
+      overflow:hidden;
+    }
+    .fish{ position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
+    .fish span{
+      position:absolute; font-size:clamp(18px, 3.5vmin, 34px);
+      animation: swim var(--dur) linear infinite; opacity:.7;
+      filter: drop-shadow(0 1px 0 rgba(0,0,0,.35));
+    }
+    @keyframes swim{ to{ transform: translateX(calc(100vw + 200px)); } }
+
+    .card{
+      z-index:1; width:min(680px, 92vw); background:linear-gradient(180deg, #0b1025bb, #0b1025dd);
+      border:1px solid #334155; border-radius:24px; padding:28px 26px; box-shadow:0 20px 60px rgba(0,0,0,.45);
+      text-align:center; backdrop-filter: blur(6px);
+    }
+    h1{ font-size: clamp(28px, 4.8vw, 44px); margin:0 0 8px; letter-spacing:.5px; }
+    .subtitle{ opacity:.9; font-size: clamp(15px, 2.8vw, 18px); margin-bottom:18px; }
+    .dish{ font-size: clamp(18px, 3.4vw, 22px); margin:6px 0 20px; }
+    .emoji-row{ font-size: clamp(22px, 5vw, 34px); letter-spacing: 2px; margin: 2px 0 18px; }
+
+    .buttons{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; position:relative; }
+    button{
+      appearance:none; border:0; border-radius:16px; padding:14px 22px; font-size:18px; font-weight:700; cursor:pointer;
+      color:white; transition: transform .08s ease, box-shadow .2s ease, filter .2s ease; box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    .btn-yes{ background:linear-gradient(135deg, var(--yes), #34d399); }
+    .btn-no{ background:linear-gradient(135deg, var(--no), #f87171); position:absolute; }
+    button:hover{ filter:brightness(1.06); }
+    button:active{ transform: translateY(1px) scale(.995); }
+
+    .note{ font-size: 13px; opacity:.7; margin-top:18px; }
+
+    dialog{ border:1px solid #334155; border-radius:20px; padding:26px; background:#0b1025; color:var(--text); max-width:520px; }
+    dialog::backdrop{ background:rgba(2,6,23,.65); }
+    .ok{ margin-top:14px; background:linear-gradient(135deg, #60a5fa, #22d3ee); }
+
+    .confetti{ position: fixed; inset:0; pointer-events:none; overflow:hidden; z-index:5; }
+    .confetti i{ position:absolute; will-change: transform; animation: fall var(--t) linear forwards; font-size: clamp(18px, 4vw, 28px); }
+    @keyframes fall{ to{ transform: translateY(110vh) rotate(720deg); opacity:0.9; } }
+
+    footer{ position:fixed; bottom:8px; width:100%; text-align:center; font-size:12px; opacity:.45; }
+    a.inline{ color: var(--accent2); text-decoration: none; border-bottom:1px dotted #22d3ee66; }
+  </style>
+</head>
+<body>
+  <div class="fish" aria-hidden="true" id="fish"></div>
+
+  <main class="card" role="dialog" aria-labelledby="title" aria-describedby="desc">
+    <div class="emoji-row">🐟🐟🐟🐟🐟 ❤️❤️❤️❤️❤️</div>
+    <h1 id="title">Janta comigo?</h1>
+    <p class="subtitle" id="desc">Uma noite especial pra nós dois ✨</p>
+    <p class="dish">Salmão ao molho mostarda com laranja 🍊</p>
+    <div class="emoji-row">🐟🐟🐟🐟🐟 ❤️❤️❤️❤️❤️</div>
+
+    <div class="buttons" id="btn-container">
+      <button class="btn-yes" id="yes">Sim, eu topo! 💖</button>
+      <button class="btn-no" id="no">Não posso hoje 😅</button>
+    </div>
+    <p class="note">(Clique e me avisa — prometo sobremesa 🍮)</p>
+  </main>
+
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <dialog id="dialog">
+    <h2 id="dlg-title">Eu te amo Bina 💞</h2>
+    <p id="dlg-text"></p>
+    <div class="buttons" style="margin-top:10px; position:static;">
+      <button class="ok" id="close">Ok</button>
+    </div>
+  </dialog>
+
+  <footer>
+    Feito com 🐟 e ❤️ — <a class="inline" href="#" id="share">compartilhar link</a>
+  </footer>
+
+  <script>
+    const WHATSAPP_NUMBER = "";
+
+    const yesBtn = document.getElementById('yes');
+    const noBtn = document.getElementById('no');
+    const dlg = document.getElementById('dialog');
+    const dlgTitle = document.getElementById('dlg-title');
+    const dlgText = document.getElementById('dlg-text');
+    const closeBtn = document.getElementById('close');
+    const confetti = document.getElementById('confetti');
+
+    function openDialog(title, text){
+      dlgTitle.textContent = title;
+      dlgText.textContent = text;
+      dlg.showModal();
+    }
+
+    function launchConfetti(symbols){
+      for(let i=0;i<36;i++){
+        const el = document.createElement('i');
+        el.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+        el.style.left = Math.random()*100 + 'vw';
+        el.style.top = '-10vh';
+        el.style.setProperty('--t', (1.5 + Math.random()*1.5) + 's');
+        confetti.appendChild(el);
+        setTimeout(()=>el.remove(), 2000);
+      }
+    }
+
+    function sendWhatsApp(message){
+      if(!WHATSAPP_NUMBER) return false;
+      const url = new URL('https://wa.me/' + WHATSAPP_NUMBER);
+      url.searchParams.set('text', message);
+      window.open(url.toString(),'_blank');
+      return true;
+    }
+
+    yesBtn.addEventListener('click', () => {
+      localStorage.setItem('respostaJanta', 'sim');
+      launchConfetti(["❤️","💖","💞","✨","🐟"]);
+      const sent = sendWhatsApp('Sim! Eu topo a janta 🥰\\nSalmão ao molho mostarda com laranja.');
+      openDialog('Eu te amo Bina 💞', sent ? 'Te mandei uma mensagem no WhatsApp!' : 'Já anotei aqui. Vou te esperar! 🕯️🍷');
+    });
+
+    // Faz o botão "Não" fugir até clicar no sim
+    noBtn.addEventListener('mouseenter', () => {
+      if(localStorage.getItem('respostaJanta') === 'sim') return;
+      const container = document.getElementById('btn-container').getBoundingClientRect();
+      const x = Math.random() * (container.width - noBtn.offsetWidth);
+      const y = Math.random() * (container.height - noBtn.offsetHeight);
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    closeBtn.addEventListener('click', () => dlg.close());
+
+    const fishWrap = document.getElementById('fish');
+    const fishIcons = ['🐟','🐠','🐡'];
+    const rows = 10;
+    for(let i=0;i<rows;i++){
+      const s = document.createElement('span');
+      s.textContent = fishIcons[Math.floor(Math.random()*fishIcons.length)];
+      s.style.top = (Math.random()*92) + 'vh';
+      s.style.left = (-200 - Math.random()*400) + 'px';
+      s.style.setProperty('--dur', (12 + Math
